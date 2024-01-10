@@ -227,10 +227,14 @@
     <context>
         <name>behavior_1/behavior.xar:/GetInput/Say (1)</name>
         <message>
-            <location filename="behavior_1/behavior.xar" line="0"/>
             <source>End</source>
             <comment>Text</comment>
-            <translation type="unfinished">End</translation>
+            <translation type="obsolete">End</translation>
+        </message>
+        <message>
+            <source>Let me think</source>
+            <comment>Text</comment>
+            <translation type="obsolete">Let me think</translation>
         </message>
     </context>
     <context>

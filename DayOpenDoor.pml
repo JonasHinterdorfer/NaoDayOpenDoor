@@ -10,6 +10,8 @@
     <Resources>
         <File name="vacuum1" src="behavior_1/vacuum1.ogg" />
         <File name="heaven1" src="behavior_1/behavior_1/heaven1.ogg" />
+        <File name="Elevator_Music_Kevin_MacLeod_-_Gaming_Background_Music_HD" src="Elevator_Music_Kevin_MacLeod_-_Gaming_Background_Music_HD.mp4" />
+        <File name="output_audio" src="output_audio.mp3" />
     </Resources>
     <Topics>
         <Topic name="ExampleDialog_enu" src="behavior_1/ExampleDialog/ExampleDialog_enu.top" topicName="ExampleDialog" language="en_US" nuance="enu" />
