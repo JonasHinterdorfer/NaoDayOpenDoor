@@ -150,7 +150,7 @@ class MyClass(GeneratedClass):
                           <Choice value="Front, sides and rear head microphones (.wav)" />
                         </Parameter>
                         <Parameter name="Temporary storage" inherits_from_parent="0" content_type="0" value="0" default_value="1" tooltip="Choose if the file should be stored as a temporary file so it is removed as soon&#x0A;as the behavior is unloaded.&#x0A;&#x0A;When this option is disabled the file is stored in ~/recordings/microphones. You can&#x0A;then get it on your computer using the menu Connection/File transfer.&#x0A;&#x0A;When this option is enabled the file is stored in the temporary folder of the behavior." id="7" />
-                        <Parameter name="Timeout (s)" inherits_from_parent="0" content_type="2" value="4" default_value="5" min="0.1" max="60" tooltip="Duration of the recording in seconds." id="8" />
+                        <Parameter name="Timeout (s)" inherits_from_parent="0" content_type="2" value="4.9" default_value="5" min="0.1" max="60" tooltip="Duration of the recording in seconds." id="8" />
                         <Timeline enable="0">
                           <BehaviorLayer name="behavior_layer1">
                             <BehaviorKeyframe name="keyframe1" index="1">
@@ -433,7 +433,7 @@ class MyClass(GeneratedClass):
                         </Timeline>
                         <Resource name="Head-sequence" type="Lock" timeout="0" />
                       </Box>
-                      <Box name="API" id="3" localization="8" tooltip="" x="891" y="90">
+                      <Box name="API" id="3" localization="8" tooltip="" x="898" y="29">
                         <bitmap>media/images/box/box-python-script.png</bitmap>
                         <script language="4">
                           <content>
@@ -466,7 +466,7 @@ class MyClass(GeneratedClass):
         file_path = p
         # Specify the URL of the API endpoint
         url = "https://transcribe.whisperapi.com"
-        headers = {'Authorization': 'Bearer 9F9NXDZS9SEKN6TTGVTGBAHK5ALQUPE3'}
+        headers = {'Authorization': 'Bearer JKZ4EKT8ETN4FI8F6M1GF3385JU39FZG'}
 
         # Open the .wav file in binary mode
         with open(file_path, 'rb') as file:
@@ -555,64 +555,7 @@ class MyClass(GeneratedClass):
                         <Parameter name="Timeout (s)" inherits_from_parent="0" content_type="2" value="3.8" default_value="1" min="0" max="5000" tooltip="Duration the box waits before stimulating the output." id="5" />
                         <Parameter name="Trigger timerOutput if cancelled" inherits_from_parent="0" content_type="0" value="0" default_value="1" tooltip="If the box is currently delaying at least one signal and cancelled, output will be stimulated." id="6" />
                       </Box>
-                      <Box name="Say" id="4" localization="8" tooltip="Say some text. The text can be localized." x="451" y="238">
-                        <bitmap>media/images/box/interaction/say.png</bitmap>
-                        <script language="4">
-                          <content>
-                            <![CDATA[import time
-
-class MyClass(GeneratedClass):
-    def __init__(self):
-        GeneratedClass.__init__(self, False)
-
-    def onLoad(self):
-        self.tts = self.session().service('ALTextToSpeech')
-        self.ttsStop = self.session().service('ALTextToSpeech') #Create another service as wait is blocking if audioout is remote
-        self.bIsRunning = False
-        self.ids = []
-
-    def onUnload(self):
-        for id in self.ids:
-            try:
-                self.ttsStop.stop(id)
-            except:
-                pass
-        while( self.bIsRunning ):
-            time.sleep( 0.2 )
-
-    def onInput_onStart(self):
-        self.bIsRunning = True
-        try:
-            sentence = "\RSPD="+ str( self.getParameter("Speed (%)") ) + "\ "
-            sentence += "\VCT="+ str( self.getParameter("Voice shaping (%)") ) + "\ "
-            sentence += self.getParameter("Text")
-            sentence +=  "\RST\ "
-            id = self.tts.pCall("say",str(sentence))
-            self.ids.append(id)
-            self.tts.wait(id)
-        finally:
-            try:
-                self.ids.remove(id)
-            except:
-                pass
-            if( self.ids == [] ):
-                self.onStopped() # activate output of the box
-                self.bIsRunning = False
-
-    def onInput_onStop(self):
-        self.onUnload()]]>
-                          </content>
-                        </script>
-                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
-                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
-                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
-                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when Box behavior is finished." id="4" />
-                        <Parameter name="Voice shaping (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="50" max="150" tooltip='Used to modify at runtime the voice feature (tone, speed). In a slighty&#x0A;different way than pitch and speed, it gives a kind of &quot;gender or age&#x0A;modification&quot; effect.&#x0A;&#x0A;For instance, a quite good male derivation of female voice can be&#x0A;obtained setting this parameter to 78%.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the&#x0A;speed parameter. For example, if you want to decrease by 20% the voice&#x0A;shaping, you will have to increase by 20% the speed to keep a constant&#x0A;average speed.' id="5" />
-                        <Parameter name="Speed (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="50" max="200" tooltip="Changes the speed of the voice.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the voice&#x0A;shaping parameter. For example, if you want to increase by 20% the speed, you&#x0A;will have to decrease by 20% the voice shaping to keep a constant average&#x0A;speed." id="6" />
-                        <Parameter name="Text" inherits_from_parent="0" content_type="5" value="Speak now" default_value="" tooltip="The text you want to say. Don&apos;t forget to translate it!" id="7" />
-                        <Resource name="Speech" type="Lock" timeout="0" />
-                      </Box>
-                      <Box name="adsf" id="6" localization="8" tooltip="" x="1174" y="46">
+                      <Box name="Gpt4WithHistory" id="6" localization="8" tooltip="" x="1052" y="46">
                         <bitmap>media/images/box/box-python-script.png</bitmap>
                         <script language="4">
                           <content>
@@ -621,6 +564,9 @@ import requests
 from naoqi import ALProxy
 
 class MyClass(GeneratedClass):
+
+    global history
+    history = []
 
     def __init__(self):
         GeneratedClass.__init__(self)
@@ -633,9 +579,13 @@ class MyClass(GeneratedClass):
         self.onStopped()
 
     def onInput_text(self, p):
+        global history  # Add this line to explicitly indicate that 'history' is a global variable
         uid = 1
+
         msg = str(p)
         response = self.send_message(msg)
+        history.append("Me: " + msg + ",You: " + response)
+        history = history[-5:]
 
         try:
             data = json.loads(response)
@@ -652,9 +602,9 @@ class MyClass(GeneratedClass):
         url = "https://www.botlibre.com/rest/json/chat"
         headers = {'Content-Type': 'application/json'}
         payload = {
-            'application': '8125916710176336740',
+            'application': '6381980704052132489',
             'instance': '48333609',
-            'message': message
+            'message': "Conversation History:"+ ','.join(history) + ",New Message:" + message
         }
 
         response = requests.post(url, headers=headers, data=json.dumps(payload))
@@ -673,63 +623,7 @@ class MyClass(GeneratedClass):
                         <Parameter name="Question" inherits_from_parent="0" content_type="3" value="What is HTL-Leonding" default_value="" custom_choice="0" tooltip="" id="7" />
                         <Parameter name="Speed (%)" inherits_from_parent="1" content_type="2" value="0.1" default_value="0" min="0" max="1" tooltip="" id="8" />
                       </Box>
-                      <Box name="Say Text" id="7" localization="8" tooltip="Say the text received on its input." x="1408" y="169">
-                        <bitmap>media/images/box/interaction/say.png</bitmap>
-                        <script language="4">
-                          <content>
-                            <![CDATA[import time
-
-class MyClass(GeneratedClass):
-    def __init__(self):
-        GeneratedClass.__init__(self, False)
-
-    def onLoad(self):
-        self.tts = self.session().service('ALTextToSpeech')
-        self.ttsStop = self.session().service('ALTextToSpeech') #Create another service as wait is blocking if audioout is remote
-        self.bIsRunning = False
-        self.ids = []
-
-    def onUnload(self):
-        for id in self.ids:
-            try:
-                self.ttsStop.stop(id)
-            except:
-                pass
-        while( self.bIsRunning ):
-            time.sleep( 0.2 )
-
-    def onInput_onStart(self, p):
-        self.bIsRunning = True
-        try:
-            sentence = "\RSPD="+ str( self.getParameter("Speed (%)") ) + "\ "
-            sentence += "\VCT="+ str( self.getParameter("Voice shaping (%)") ) + "\ "
-            sentence += str(p)
-            sentence +=  "\RST\ "
-            id = self.tts.pCall("say",str(sentence))
-            self.ids.append(id)
-            self.tts.wait(id)
-        finally:
-            try:
-                self.ids.remove(id)
-            except:
-                pass
-            if( self.ids == [] ):
-                self.onStopped() # activate output of the box
-                self.bIsRunning = False
-
-    def onInput_onStop(self):
-        self.onUnload()]]>
-                          </content>
-                        </script>
-                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
-                        <Input name="onStart" type="3" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
-                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
-                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when Box behavior is finished." id="4" />
-                        <Parameter name="Voice shaping (%)" inherits_from_parent="1" content_type="1" value="118" default_value="100" min="50" max="150" tooltip='Used to modify at runtime the voice feature (tone, speed). In a slighty&#x0A;different way than pitch and speed, it gives a kind of &quot;gender or age&#x0A;modification&quot; effect.&#x0A;&#x0A;For instance, a quite good male derivation of female voice can be&#x0A;obtained setting this parameter to 78%.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the&#x0A;speed parameter. For example, if you want to decrease by 20% the voice&#x0A;shaping, you will have to increase by 20% the speed to keep a constant&#x0A;average speed.' id="5" />
-                        <Parameter name="Speed (%)" inherits_from_parent="1" content_type="1" value="76" default_value="100" min="50" max="200" tooltip="Changes the speed of the voice.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the voice&#x0A;shaping parameter. For example, if you want to increase by 20% the speed, you&#x0A;will have to decrease by 20% the voice shaping to keep a constant average&#x0A;speed." id="6" />
-                        <Resource name="Speech" type="Lock" timeout="0" />
-                      </Box>
-                      <Box name="Play Sound" id="8" localization="8" tooltip="Play a sound file. Select the file in parameters. The format of the file can be wav or ogg (on virtual robot) and also mp3 (on a real robot).&#x0A;&#x0A;Note: There can be some delay to play ogg or mp3 (on a robot) files. We advise you to use wav if&#x0A;you want a fast play of the file." x="1192" y="349">
+                      <Box name="Play Sound" id="8" localization="8" tooltip="Play a sound file. Select the file in parameters. The format of the file can be wav or ogg (on virtual robot) and also mp3 (on a real robot).&#x0A;&#x0A;Note: There can be some delay to play ogg or mp3 (on a robot) files. We advise you to use wav if&#x0A;you want a fast play of the file." x="1175" y="356">
                         <bitmap>media/images/box/interaction/play_music.png</bitmap>
                         <script language="4">
                           <content>
@@ -850,16 +744,264 @@ class MyClass(GeneratedClass):
                         </Timeline>
                         <Resource name="Audio player" type="Lock" timeout="0" />
                       </Box>
+                      <Box name="Gpt4WithoutHistory (1)" id="5" localization="8" tooltip="" x="1115" y="633">
+                        <bitmap>media/images/box/box-python-script.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[import json
+import requests
+from naoqi import ALProxy
+
+class MyClass(GeneratedClass):
+
+    def __init__(self):
+        GeneratedClass.__init__(self)
+
+    def onUnload(self):
+        pass
+
+    def onInput_onStop(self):
+        self.onUnload()
+        self.onStopped()
+
+    def onInput_text(self, p):
+        uid = 1
+        msg = str(p)
+        response = self.send_message(msg)
+
+        try:
+            data = json.loads(response)
+            message = data.get("message", "Error: 'message' key not found in response")
+
+            self.logger.fatal(str(message))
+            self.output(str(message))
+        except ValueError as e:
+            self.logger.error("Error decoding JSON: {}".format(e))
+            self.output("Error decoding JSON")
+
+    @staticmethod
+    def send_message(message):
+        url = "https://www.botlibre.com/rest/json/chat"
+        headers = {'Content-Type': 'application/json'}
+        payload = {
+            'application': '6381980704052132489',
+            'instance': '48333609',
+            'message': message
+        }
+
+        response = requests.post(url, headers=headers, data=json.dumps(payload))
+
+        if response.status_code == 200:
+            return response.content
+        return]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                        <Input name="text" type="0" type_size="1" nature="1" inner="0" tooltip="" id="4" />
+                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="5" />
+                        <Output name="output" type="3" type_size="1" nature="1" inner="0" tooltip="" id="6" />
+                        <Parameter name="Question" inherits_from_parent="0" content_type="3" value="What is HTL-Leonding" default_value="" custom_choice="0" tooltip="" id="7" />
+                        <Parameter name="Speed (%)" inherits_from_parent="1" content_type="2" value="0.1" default_value="0" min="0" max="1" tooltip="" id="8" />
+                      </Box>
+                      <Box name="TextToSpeach" id="4" localization="8" tooltip="" x="1208" y="94">
+                        <bitmap>media/images/box/box-python-script.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[import requests
+
+
+class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self)
+
+    def onLoad(self):
+        #put initialization code here
+        pass
+
+    def onUnload(self):
+        #put clean-up code here
+        pass
+
+    def onInput_onStart(self):
+        pass
+
+    def onInput_onStop(self):
+        self.onUnload() #it is recommended to reuse the clean-up as the box is stopped
+        self.onStopped() #activate the output of the box
+
+    def onInput_input(self, p):
+        CHUNK_SIZE = 1024
+        url = "https://api.elevenlabs.io/v1/text-to-speech/5asbBxi8Fyryzxg5kmtz"
+        self.logger.warning(str(p))
+        headers = {
+            "Accept": "audio/mpeg",
+            "Content-Type": "application/json",
+            "xi-api-key": "9b5c6800d23e4f388a506e57a33f2c07"
+        }
+
+        # Get text input from the user
+
+        data = {
+            "text": str(p),
+            "model_id": "eleven_multilingual_v1",
+            "voice_settings": {
+                "stability": 0.5,
+                "similarity_boost": 0.5
+            }
+        }
+
+        try:
+            # Send text-to-speech request
+            response = requests.post(url, json=data, headers=headers)
+            self.logger.warning("respons got")
+            output_file_path = 'output.mp3'
+
+            # Check if the request was successful
+            with open(output_file_path, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+                    if chunk:
+                        f.write(chunk)
+
+            self.logger.warning("Audio response saved to: {}".format(output_file_path))
+            self.logger.warning(str(os.path.abspath(output_file_path)))
+            self.output(str(os.path.abspath(output_file_path)))
+        except Exception as e:
+            self.logger.error("An exception occurred")
+
+        self.onStopped()]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                        <Input name="input" type="0" type_size="1" nature="1" inner="0" tooltip="" id="4" />
+                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="5" />
+                        <Output name="output" type="3" type_size="1" nature="1" inner="0" tooltip="" id="6" />
+                      </Box>
+                      <Box name="Say" id="7" localization="8" tooltip="Say some text. The text can be localized." x="1442" y="602">
+                        <bitmap>media/images/box/interaction/say.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[import time
+
+class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.tts = self.session().service('ALTextToSpeech')
+        self.ttsStop = self.session().service('ALTextToSpeech') #Create another service as wait is blocking if audioout is remote
+        self.bIsRunning = False
+        self.ids = []
+
+    def onUnload(self):
+        for id in self.ids:
+            try:
+                self.ttsStop.stop(id)
+            except:
+                pass
+        while( self.bIsRunning ):
+            time.sleep( 0.2 )
+
+    def onInput_onStart(self):
+        self.bIsRunning = True
+        try:
+            sentence = "\RSPD="+ str( self.getParameter("Speed (%)") ) + "\ "
+            sentence += "\VCT="+ str( self.getParameter("Voice shaping (%)") ) + "\ "
+            sentence += self.getParameter("Text")
+            sentence +=  "\RST\ "
+            id = self.tts.pCall("say",str(sentence))
+            self.ids.append(id)
+            self.tts.wait(id)
+        finally:
+            try:
+                self.ids.remove(id)
+            except:
+                pass
+            if( self.ids == [] ):
+                self.onStopped() # activate output of the box
+                self.bIsRunning = False
+
+    def onInput_onStop(self):
+        self.onUnload()]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
+                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when Box behavior is finished." id="4" />
+                        <Parameter name="Voice shaping (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="50" max="150" tooltip='Used to modify at runtime the voice feature (tone, speed). In a slighty&#x0A;different way than pitch and speed, it gives a kind of &quot;gender or age&#x0A;modification&quot; effect.&#x0A;&#x0A;For instance, a quite good male derivation of female voice can be&#x0A;obtained setting this parameter to 78%.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the&#x0A;speed parameter. For example, if you want to decrease by 20% the voice&#x0A;shaping, you will have to increase by 20% the speed to keep a constant&#x0A;average speed.' id="5" />
+                        <Parameter name="Speed (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="50" max="200" tooltip="Changes the speed of the voice.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the voice&#x0A;shaping parameter. For example, if you want to increase by 20% the speed, you&#x0A;will have to decrease by 20% the voice shaping to keep a constant average&#x0A;speed." id="6" />
+                        <Parameter name="Text" inherits_from_parent="0" content_type="5" value="Hello" default_value="" tooltip="The text you want to say. Don&apos;t forget to translate it!" id="7" />
+                        <Resource name="Speech" type="Lock" timeout="0" />
+                      </Box>
+                      <Box name="Play Sound File" id="9" localization="8" tooltip="Play the sound." x="1394" y="171">
+                        <bitmap>media/images/box/interaction/play_music.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[import time
+
+class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.player = self.session().service('ALAudioPlayer')
+        self.playerStop = self.session().service('ALAudioPlayer') #Create another service as wait is blocking if audioout is remote
+        self.bIsRunning = False
+        self.ids = []
+
+    def onUnload(self):
+        for id in self.ids:
+            try:
+                self.playerStop.stop(id)
+            except:
+                pass
+        while( self.bIsRunning ):
+            time.sleep( 0.2 )
+
+    def onInput_onStart(self, p):
+        self.bIsRunning = True
+        try:
+            if (self.getParameter("Play in loop")) :
+               id = self.player.pCall("playFileInLoop",p,self.getParameter("Volume (%)")/100.,self.getParameter("Balance L/R"))
+            else :
+               id = self.player.pCall("playFileFromPosition",p,self.getParameter("Begin position (s)"),self.getParameter("Volume (%)")/100.,self.getParameter("Balance L/R"))
+            self.ids.append(id)
+            self.player.wait(id)
+        finally:
+            try:
+                self.ids.remove(id)
+            except:
+                pass
+            if( self.ids == [] ):
+                self.onStopped() # activate output of the box
+                self.bIsRunning = False
+
+    def onInput_onStop(self):
+        self.onUnload()]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+                        <Input name="onStart" type="3" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
+                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when Box behavior is finished." id="4" />
+                        <Parameter name="Begin position (s)" inherits_from_parent="1" content_type="2" value="0" default_value="0" min="0" max="600" tooltip="Position in seconds where the playing must start." id="5" />
+                        <Parameter name="Volume (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Volume the file is played with." id="6" />
+                        <Parameter name="Balance L/R" inherits_from_parent="1" content_type="2" value="0" default_value="0" min="-1" max="1" tooltip="Value which determines if the sound is played more on the robot&apos;s left or right.&#x0A;You can particularly set it to:&#x0A;- -1 to play only on the left loudspeaker.&#x0A;- 0 to play on both loudspeakers.&#x0A;- 1 to play only on the right loudspeaker." id="7" />
+                        <Parameter name="Play in loop" inherits_from_parent="1" content_type="0" value="0" default_value="0" tooltip="This parameter allows to play the file in loop. The playing will start each time at&#x0A;the beginning of the file." id="8" />
+                      </Box>
                       <Link inputowner="3" indexofinput="5" outputowner="1" indexofoutput="4" />
                       <Link inputowner="2" indexofinput="2" outputowner="0" indexofoutput="2" />
-                      <Link inputowner="4" indexofinput="2" outputowner="2" indexofoutput="8" />
-                      <Link inputowner="14" indexofinput="2" outputowner="4" indexofoutput="4" />
                       <Link inputowner="6" indexofinput="4" outputowner="3" indexofoutput="7" />
-                      <Link inputowner="0" indexofinput="4" outputowner="7" indexofoutput="4" />
-                      <Link inputowner="1" indexofinput="2" outputowner="4" indexofoutput="4" />
-                      <Link inputowner="8" indexofinput="2" outputowner="3" indexofoutput="7" />
-                      <Link inputowner="8" indexofinput="3" outputowner="6" indexofoutput="6" />
-                      <Link inputowner="7" indexofinput="2" outputowner="6" indexofoutput="6" />
+                      <Link inputowner="8" indexofinput="2" outputowner="1" indexofoutput="4" />
+                      <Link inputowner="1" indexofinput="2" outputowner="2" indexofoutput="8" />
+                      <Link inputowner="4" indexofinput="4" outputowner="6" indexofoutput="6" />
+                      <Link inputowner="8" indexofinput="3" outputowner="4" indexofoutput="5" />
+                      <Link inputowner="9" indexofinput="2" outputowner="4" indexofoutput="6" />
+                      <Link inputowner="0" indexofinput="4" outputowner="9" indexofoutput="4" />
                     </Diagram>
                   </BehaviorKeyframe>
                 </BehaviorLayer>

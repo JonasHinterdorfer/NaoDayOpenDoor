@@ -208,9 +208,10 @@
     <context>
         <name>behavior_1/behavior.xar:/GetInput/Say</name>
         <message>
+            <location filename="behavior_1/behavior.xar" line="0"/>
             <source>Hello</source>
             <comment>Text</comment>
-            <translation type="vanished">Hello</translation>
+            <translation>Hello</translation>
         </message>
         <message>
             <source>Say something</source>
@@ -218,10 +219,9 @@
             <translation type="obsolete">Say something</translation>
         </message>
         <message>
-            <location filename="behavior_1/behavior.xar" line="0"/>
             <source>Speak now</source>
             <comment>Text</comment>
-            <translation type="unfinished">Speak now</translation>
+            <translation type="obsolete">Speak now</translation>
         </message>
     </context>
     <context>
