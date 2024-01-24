@@ -278,10 +278,9 @@
             <translation type="obsolete">Ask me a question?</translation>
         </message>
         <message>
-            <location filename="behavior_1/behavior.xar" line="0"/>
             <source>Slap my head in the front</source>
             <comment>Text</comment>
-            <translation type="unfinished">Slap my head in the front</translation>
+            <translation type="obsolete">Slap my head in the front</translation>
         </message>
     </context>
     <context>
