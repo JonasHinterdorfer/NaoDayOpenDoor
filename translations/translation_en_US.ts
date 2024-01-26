@@ -208,10 +208,9 @@
     <context>
         <name>behavior_1/behavior.xar:/GetInput/Say</name>
         <message>
-            <location filename="behavior_1/behavior.xar" line="0"/>
             <source>Hello</source>
             <comment>Text</comment>
-            <translation>Hello</translation>
+            <translation type="vanished">Hello</translation>
         </message>
         <message>
             <source>Say something</source>
