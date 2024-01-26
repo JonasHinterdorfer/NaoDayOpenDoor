@@ -2,27 +2,19 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from gtts import gTTS
 import os
-
-import wave
-import array
-import soundfile as sf
-import struct
-
-import pyloudnorm as pyln
 from pydub import AudioSegment
 
-upper_umlauts = {'Ä': '\u00C4', 'Ö': '\u00D6', 'Ü': '\u00DC'}
+def remove_extra_semicolons(input_string):
+    first_semicolon_index = input_string.find(':')
+    if first_semicolon_index == -1 or first_semicolon_index == len(input_string) - 1:
+        return input_string
+    result_string = input_string[:first_semicolon_index + 1] + input_string[first_semicolon_index + 1:].replace(':', '')
 
-# Lowercase vowels with umlauts
-lower_umlauts = {'ä': '\u00E4', 'ö': '\u00F6', 'ü': '\u00FC'}
+    return result_string
 
 def increase_loudness(input_file, output_file, target_loudness):
     song = AudioSegment.from_mp3(input_file)
-
-    # boost volume by 6dB
     louder_song = song + 10
-
-    #save louder song 
     louder_song.export(output_file, format='mp3')
 
 
@@ -42,11 +34,12 @@ class S(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         self._set_headers()
-        mytext = str(post_data).replace("You: {message:", "").replace("You:", "").replace("Assistant: ", "").split(":")[1].strip().replace("}'", "").replace("\"", "").replace(":", "")
-        mytext = mytext.replace("\\\\u00e4", "ä").replace("\\\\u00f6", "ö").replace("\\\\u00fc", "ü").replace("\\\\u00c4", "Ä").replace("\\\\u00d6", "Ö").replace("\\\\u00dc", "Ü")
+        mytext = str(post_data).replace("You: {message:", "").replace("You:", "").replace("Assistant: ", "")
+        mytext = remove_extra_semicolons(mytext)
+        mytext = mytext.split(":")[1].strip().replace("}'", "").replace("\"", "").replace(":", "")
+        mytext = mytext.replace("\\\\u00e4", "ä").replace("\\\\u00f6", "ö").replace("\\\\u00fc", "ü").replace("\\\\u00c4", "Ä").replace("\\\\u00d6", "Ö").replace("\\\\u00dc", "Ü").replace("\\\\u00df", "ß")
         print(mytext)
         language = 'de'
-        
         myobj = gTTS(text=mytext, lang=language, slow=False) 
         myobj.save("/home/poci/Desktop/Nao/example.mp3")
         print(myobj)
