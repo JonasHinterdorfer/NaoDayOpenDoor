@@ -13,11 +13,13 @@ class FileTransfer:
         self.directory_to_save_local = "./example.mp3"
 
     def get_recording_from_nao(self):
-        os.system(f"scp {self.nao_user}@{self.nao_user}:{self.file_from_rec_nao} {self.file_from_rec_local}")
+        print(f"/usr/bin/sshpass -p '{self.nao_pass}' scp {self.nao_user}@{self.nao_ip}:{self.file_from_rec_nao} {self.file_from_rec_local}")
+        os.system(f"sshpass -p '{self.nao_pass}' scp {self.nao_user}@{self.nao_ip}:{self.file_from_rec_nao} {self.file_from_rec_local}")
         return self.file_from_rec_local
 
     def send_audio_to_nao(self):
-        os.system(f"sshpass -p '{self.nao_pass} {self.directory_to_save_local} {self.naoUser}@{self.ipaddressNao}:{self.directory_to_save_nao}")
+        os.system(
+            f"sshpass -p '{self.nao_pass}' scp {self.directory_to_save_local} {self.nao_user}@{self.nao_ip}:{self.directory_to_save_nao}")
         return self.directory_to_save_nao
 
     def get_own_ip(self):

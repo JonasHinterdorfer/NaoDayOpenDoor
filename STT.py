@@ -7,7 +7,7 @@ class STT:
     def __init__(self):
         self.APIKey = "ETQDICN7RQWZ6NRXNYA3Q3JCL9U66DKM"
         self.FileType = "wav"
-        self.Language = ""
+        self.Language = "de"
         self.FilePath = "./rec.wav"
 
     def run(self):
