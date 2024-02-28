@@ -5,10 +5,10 @@ import requests
 class Bot:
     def __init__(self):
         self.application = '4892915099683534077'
-        self.instance = '46950262'
+        self.instance = '48333609'
         self.history = []
         self.historylength = 3
-        self.historyCharLength = 50
+        self.historyCharLength = 100
 
     def bot(self):
         message_payload = {
@@ -22,6 +22,7 @@ class Bot:
         response = requests.post(url, headers=headers, data=json.dumps(message_payload))
 
         if response.status_code == 200:
+            print("bot response: " + json.loads(response.content).get('message'))
             return json.loads(response.content).get('message')
         return
 

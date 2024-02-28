@@ -26,6 +26,13 @@ def home():
     return jsonify({'path': text}), 200
     return 200
 
+from flask import Response
+
+@app.route('/', methods=['PATCH'])
+def home_patch():
+    bot.history = []
+    return Response(status=200)
+
 
 if __name__ == '__main__':
     app.run(host=ft.get_own_ip(),debug=True)
